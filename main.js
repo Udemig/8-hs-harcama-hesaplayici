@@ -13,6 +13,12 @@ const totalInfo = document.querySelector("#total-info");
 const nameInput = document.getElementById("name-input");
 //console.log(nameInput)
 
+const statusCheck = document.getElementById("status-input");
+//console.log(statusCheck)
+
+const selectFilter = document.getElementById("filter-select");
+//console.log(selectFilter)
+
 const userName = localStorage.getItem("name");
 
 nameInput.value = userName;
@@ -26,6 +32,8 @@ nameInput.addEventListener("change", (e) => {
 formBtn.addEventListener("click", addExpense);
 //harcama kartlarının bulundğu listeye tıklanılan eleman tespiti tıklama oalyı ekledik
 list.addEventListener("click", handleClick);
+//Select box her değiştiğinde dinlemek için
+selectFilter.addEventListener("change", handleFilter);
 
 //Toplam bilgisini tutmak için bir değişken tnaımladık
 let toplam = 0;
@@ -54,6 +62,15 @@ function addExpense(e) {
     const harcamaDiv = document.createElement("div");
     //oluştrualn dive expense classı atanıyor
     harcamaDiv.classList.add("expense");
+
+    //Eğer ödendi checkboxı işaretlenmişse bu koşula gir
+    if (statusCheck.checked) {
+      console.log(statusCheck.checked);
+      //kartın claslarına payed classını ekle
+      harcamaDiv.classList.add("payed");
+    }
+
+    //console.log(statusCheck.checked)
     //oluşturan divin İÇERİĞİNE ilgili html elemanları veriliyor
     //tek tırnak ile sadece tek satır yazabildiğimiz ve içerisin dinamik
     //veri ekleyemdiğimiz için backtick (``) kullanılır
@@ -99,4 +116,69 @@ function handleClick(e) {
     //istenilen bir elemanı  html den kaldırma
     kapsayiciElement.remove();
   }
+}
+
+// const dizi=[1,2,3,4,5,6,7]
+// console.log(dizi)
+
+
+
+//  dizi.map((diziElemani,elemannIndexi,dizi)=>{
+//    console.log(diziElemani,elemannIndexi,dizi)
+
+//  })
+
+// dizi.forEach((diziElemani)=>{
+//   console.log(diziElemani)
+// })
+
+//Selectbox her değiştiğinde çalışacak fonskiyon
+function handleFilter(e) {
+  //console.log('ilitre fonks')
+
+  const harcamaKartlari = list.childNodes;
+  //console.log(items)
+
+  //addEventlistenrdan gelen event yani olay bilgisinin hedefteki değerini
+  //filterValue değişkenine atıyoruz
+  //
+  const filterValue = e.target.value;
+  //console.log(filterValue)
+
+
+
+  //forEach,map,for,
+
+  //Harcama kartlarının hepsini forEach ile dön
+  harcamaKartlari.forEach((harcamaKarti) => {
+    //foreach dönüsüngden gelen herbir harcama kartı için select boxın 
+    //değerine göre işleme tabi tutma
+    console.log(harcamaKarti);
+    //switch ile selectboxın değerini ele aldık
+    switch (filterValue) {
+
+      //filitre heğeri all ise yani Hepsi seçili ise
+      case "all":
+        //bütün harcama kartlarının görünüm özelliğini aktif ettik
+        harcamaKarti.style.display = "flex";
+        break;
+
+      case "payed":
+        if (!harcamaKarti.classList.contains("payed")) {
+          harcamaKarti.style.display = "none";
+        } else {
+          harcamaKarti.style.display = "flex";
+        }
+        break;
+
+      case "not-payed":
+        if (harcamaKarti.classList.contains("payed")) {
+          harcamaKarti.style.display = "none";
+        } else {
+          harcamaKarti.style.display = "flex";
+        }
+
+        break;
+    }
+  });
 }
